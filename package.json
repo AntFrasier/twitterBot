@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/AntFrasier/twitterBot/issues"
   },
-  "homepage": "https://github.com/AntFrasier/twitterBot#readme"
+  "homepage": "https://github.com/AntFrasier/twitterBot#readme",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "twitter-api-v2": "^1.12.2"
+  }
 }
