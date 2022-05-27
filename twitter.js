@@ -11,19 +11,21 @@ var client = new TwitterApi({
   accessSecret: process.env.ACCESS_SECRET ,
 });
 
-const sendTweet = async () => {
+const sendTweet = async (results) => {
   console.log ('send');
   try {
-   const liked = await client.v2.like('1529460352844451843', results.data[i].id);
-   const retweet = await client.v2.retweet('1529460352844451843', results.data[i].id);
-   const reply = await client.v2.reply('Oo Hey @Theda32516554, @BolandDrummer, @Oleta50707472, @Emiko74547042, @Nelda29443713 have a look ! ', results.data[i].id )
-   const following = await client.v2.follow('1529460352844451843', results.data[i].author_id);
+   const liked = await client.v2.like('1529460352844451843', results.id);
+   const retweet = await client.v2.retweet('1529460352844451843', results.id);
+   const reply = await client.v2.reply('Oo Hey @Theda32516554, @BolandDrummer, @Oleta50707472, @Emiko74547042, @Nelda29443713 have a look ! ', results.id )
+   const following = await client.v2.follow('1529460352844451843', results.author_id);
+   console.log('++++++++++++Retweeted !!++++++++++++++')
   } catch (e) {console.log (e)}
 }
 
 const rwClient = client.readWrite;
 const myId = process.env.MY_ID
 const search = async() => {
+  try{
   const results = await client.v2.get('tweets/search/recent', { query: 'Follow RT #giveaway -is:retweet', max_results: 10, 'tweet.fields': ['referenced_tweets'], expansions : ['author_id'] });
   const length = results.data.length;
   console.log(length)
@@ -33,7 +35,7 @@ const search = async() => {
     console.log('********************************',users)
     if (users.errors ) continue;
     if (users.meta.result_count === 0) {
-      sendTweet();
+      await sendTweet(results.data[i]);
       continue;
     }
     const usersLikedLength =  users.data.length;
@@ -46,13 +48,13 @@ const search = async() => {
       }
       if (isLiked === false) {
         console.log( 'data that will be liked ', results.data[i]);
-        sendTweet();
+        await sendTweet(results.data[i]);
       } 
-    }
+    }}catch(e) {console.log(e)}
 }
 
-cron.schedule('* */15 * * * *', () => {
-  console.log('running');
+// cron.schedule('*/30 * * * *', () => {
+//   console.log('running');
   search();
-})
+// })
 
