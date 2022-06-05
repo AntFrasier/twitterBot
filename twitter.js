@@ -53,8 +53,8 @@ const search = async() => {
     }}catch(e) {console.log(e)}
 }
 
-// cron.schedule('*/30 * * * *', () => {
-//   console.log('running');
+cron.schedule('*/30 * * * *', () => {
+  console.log('running');
   search();
-// })
+})
 
